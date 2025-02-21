@@ -47,7 +47,7 @@ def process_hitran_data(wavelength, intensity, start_wavelength, end_wavelength,
     """
     
     # check that start & end wavelength are in range
-    if (start_wavelength) < min(wavelength)-0.01 or (end_wavelength+1) > max(wavelength)+0.01:
+    if (start_wavelength) < min(wavelength)-0.01 or (end_wavelength) > max(wavelength)+0.01:
         raise ValueError(f"Specified wavelength range ({start_wavelength}-{end_wavelength} nm) is outside the data range ({min(wavelength):.2f}-{max(wavelength):.2f} nm).")
 
     
@@ -120,7 +120,7 @@ molecule, wavelength, intensity = read_hitran_data(input_dir, filename)
 
 # Step 2: Bin data
 start_wavelength = 2000.0   # [nm]
-end_wavelength = 2400.0
+end_wavelength = 2500.0
 bin_size = 0.05             # [nm]
 
 midpoints, binned_sensitivity, binned_line_counts = process_hitran_data(wavelength, intensity, start_wavelength, end_wavelength, bin_size)

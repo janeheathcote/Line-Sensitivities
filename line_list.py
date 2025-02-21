@@ -16,6 +16,7 @@ def read_hitran_data(directory, filename):
       - Intensity of spectral lines
       - Molecule name (from filename)
     """
+    
     molecule_name = os.path.basename(filename).split('_')[0]
     path = os.path.join(directory, filename)
     
@@ -40,11 +41,15 @@ def read_hitran_data(directory, filename):
     return molecule_name, wavelength, intensity
 
 
-def process_hitran_data(molecule_name, wavelength, intensity, start_wavelength, end_wavelength, bin_size=0.5, Plot=True):
+def process_hitran_data(wavelength, intensity, start_wavelength, end_wavelength, bin_size=0.5):
     """
-    Filters data within a specified wavelength range, bins the intensity values, and 
-    optionally plots this sensitivity vs. wavelength.
+    Filters data within a specified wavelength range and bins the intensity values.
     """
+    
+    # check that start & end wavelength are in range
+    if (start_wavelength) < min(wavelength)-0.01 or (end_wavelength+1) > max(wavelength)+0.01:
+        raise ValueError(f"Specified wavelength range ({start_wavelength}-{end_wavelength} nm) is outside the data range ({min(wavelength):.2f}-{max(wavelength):.2f} nm).")
+
     
     # filter data based on the specified wavelength range
     filtered_data = [(wl, inten) for wl, inten in zip(wavelength, intensity) if start_wavelength <= wl <= end_wavelength]
@@ -65,15 +70,6 @@ def process_hitran_data(molecule_name, wavelength, intensity, start_wavelength, 
     # calculate midpoints of the bins
     midpoints = (bins[:-1] + bins[1:]) / 2
 
-    # optionally plot sensitivity vs. wavelength
-    if Plot:
-        plt.figure(figsize=(10, 6))
-        plt.plot(midpoints, binned_sensitivity)
-        plt.xlabel('Wavelength (nm)')
-        plt.ylabel('Sensitivity')
-        plt.title('{} Sensitivity vs. Wavelength ({}-{} nm)'.format(molecule_name, start_wavelength, end_wavelength))
-        plt.grid(True)
-        plt.show()
     
     return midpoints, binned_sensitivity, binned_line_counts
         
@@ -106,21 +102,32 @@ def find_line_number(start, end, midpoints, binned_line_counts):
         print(f"No data in the bin range {start}-{end} nm.")
         
 
+def plot_sensitivity(molecule_name, midpoints, binned_sensitivity):
+    plt.figure(figsize=(10, 6))
+    plt.plot(midpoints, binned_sensitivity)
+    plt.xlabel('Wavelength (nm)')
+    plt.ylabel('Sensitivity')
+    plt.title('{} Sensitivity vs. Wavelength'.format(molecule_name))
+    plt.grid(True)
+    plt.show()
 
-# Filename & input directory setup
-input_dir = r'C:/Users/janee/Documents/Astrophotonics/Methane_Mapping/Input/'
+
+input_dir = r'C:/Users/janee/Documents/Astrophotonics/Methane_Mapping/Line-Sensitivities/Input/2000-2400/'
 filename = r'CO2_list.out'
 
 # Step 1: Read in HITRAN data file
 molecule, wavelength, intensity = read_hitran_data(input_dir, filename)
 
-# Step 2: Bin data and (optionally) plot
-start_wavelength = 2000   # [nm]
-end_wavelength = 2400
-bin_size = 0.05           # [nm]
+# Step 2: Bin data
+start_wavelength = 2000.0   # [nm]
+end_wavelength = 2400.0
+bin_size = 0.05             # [nm]
 
-midpoints, binned_sensitivity, binned_line_counts = process_hitran_data(molecule, wavelength, intensity, start_wavelength, end_wavelength, bin_size, Plot=True)
+midpoints, binned_sensitivity, binned_line_counts = process_hitran_data(wavelength, intensity, start_wavelength, end_wavelength, bin_size)
 
 # Step 3: Print top 5 bins with highest sensitivities
 find_sensitivity_peaks(midpoints, binned_sensitivity)
 
+
+# Optional: plot
+plot_sensitivity(molecule, midpoints, binned_sensitivity)

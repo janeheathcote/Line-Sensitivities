@@ -1,6 +1,6 @@
 # HITRAN Data Processing and Sensitivity Analysis
 
-This repository contains code for processing HITRAN spectral line data and performing sensitivity analysis on various molecules. It includes functions for reading, filtering, and binning HITRAN data, and identifying regions with the highest sensitivity for the specified wavelength range.
+This repository contains code for processing HITRAN spectral line data and identifying regions with the highest sensitivity, over a specified wavelength range.
 
 Sample input data is provided in the Input/ directory for CH4, CO, CO2, H2O, N2O, and NH3. There are two sub-folders:
 - 1200-1700/: Contains spectral data for molecules in the wavelength range of 1200-1700 nm.
@@ -10,7 +10,7 @@ Any data file from the [HITRANonline line-by-line search](https://hitran.org/lbl
 
 ### Example:
 
-The following example reads data for CO2, processes it in the wavelength range of 2200-2400 nm, plots the sensitivity, and prints data on the top 5 bins with the highest sensitivity:
+The following example reads data for CO2, processes it over a wavelength range of 2200-2400 nm, plots the sensitivity, and prints data on the top 5 bins with the highest sensitivity:
 
 ```python
 input_dir = r'path/to/your/repository/Input/2000-2500/'

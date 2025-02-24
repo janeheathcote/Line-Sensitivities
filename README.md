@@ -21,7 +21,7 @@ filename = r'CO2_list.out'
 molecule, wavelength, intensity = read_hitran_data(input_dir, filename)
 start_wavelength = 2200.0  # nm
 end_wavelength = 2400.0    # nm
-bin_size = 0.05            # nm
+bin_size = 1               # nm
 
 midpoints, binned_sensitivity, binned_line_counts = process_hitran_data(wavelength, intensity, start_wavelength, end_wavelength, bin_size)
 

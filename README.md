@@ -3,6 +3,7 @@
 This repository contains code for processing HITRAN spectral line data and identifying regions with the highest sensitivity, over a specified wavelength range.
 
 Sample input data is provided in the Input/ directory for CH4, CO, CO2, H2O, N2O, and NH3. There are two sub-folders:
+- 1000-2500/: Contains spectral data for molecules in the wavelength range of 1000-2500 nm.
 - 1200-1700/: Contains spectral data for molecules in the wavelength range of 1200-1700 nm.
 - 2000-2500/: Contains spectral data for molecules in the wavelength range of 2000-2500 nm.
 
